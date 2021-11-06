@@ -1,15 +1,5 @@
 # R-Basics
 R Basics for Beginners
-
----
-title: "Loading Data Using R"
-author: "Md Mominul Islam"
-output:
-  html_document: default
-  pdf_document: default
-  word_document: default
----
-
 ### Introduction
 
 This article is useful for people intended to use R as an elementary introduction. My motto here is 'Learning is FUN!' Let's get started with basic introduction of R.
