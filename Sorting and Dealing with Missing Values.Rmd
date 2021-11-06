@@ -1,0 +1,134 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+In our previous file, we talked about the beginning of R, data loading and use of some functions which are used by data analyst for writing reseatch papers, doing statistical analysis. Now we are in part II.
+
+```{r data Loading, echo = FALSE}
+Squid <- read.table(file = "/Users/mominul/OneDrive - South Dakota State University - SDSU/Data Science/Books/R Books/A Beginners Guide to R/RBook/squid.txt",header = TRUE)
+```
+
+For the squid data, you may want to sort the GSI data from low to high values of the variable **month**, even if only for a quick observation. The following code can be used
+
+```{r}
+Ord1 <- order(Squid$Month)
+head(Squid[Ord1, ]) # First few observations of sorted data
+tail(Squid[Ord1, ]) # Last Few observations of sorted data
+```
+
+### Combining Data Set Using Merge Function
+
+```{r}
+Squid1 <- read.table(file = "/Users/mominul/OneDrive - South Dakota State University - SDSU/Data Science/Books/R Books/A Beginners Guide to R/RBook/squid1.txt", header = TRUE)
+Squid2 <- read.table(file = "/Users/mominul/OneDrive - South Dakota State University - SDSU/Data Science/Books/R Books/A Beginners Guide to R/RBook/squid2.txt", header = TRUE)
+SquidMerged <- merge(Squid1, Squid2, by = "Sample")
+head(SquidMerged)
+dim(SquidMerged)
+```
+
+The merge command takes as argument the two data frames Squid1 and Squid2 and combines the two datasets using as a common identifier the variable Sample. A useful option within the merge function is **all**. By default it is set to FALSE, which means that rows in which either Squid1 or Squid2 has missing values are omitted. When set to TRUE, NAs are filled in if Squid1 has no data for a
+sample that is present in Squid2, and vice versa. 
+
+```{r}
+SquidMerged <- merge(Squid1, Squid2, by = "Sample",
+                     all = TRUE)
+```
+
+### Dealing with Missing Values
+
+Suppose you want a function that takes as input a data frame that contains the data and calculates the number of missing values in each variable. The syntax of such a function is
+
+```{r}
+NAPerVariable <- function(X1) {
+  D1 <- is.na(X1)  #creates a Boolean matrix of the same dimension as X1
+  colSums(D1)
+}
+
+```
+
+Let's use the function above to detect missing values in R.
+
+```{r}
+#csv data set reading
+water <- read.csv('https://umich.instructure.com/files/399172/download?download_frd=1', header=T)
+#use the existing colnames function to add column names to water data
+colnames(water) <- c("Year", "Region", "Country","Residence","DrinikingWater","Sanitation")
+NAPerVariable(water) # Missing value detection
+```
+
+From the above code, we are able to determine number of missing values in the water data set. There are 32 missing values for Drinking water column and 135 missing values in Sanitation column.
+
+Sometimes in a given data set, you may see zeros in every column. If you want to count zeros in a specific dataset. You can use:
+
+```{r}
+##Counting Number of zeros
+ZerosPerVariable <- function(X1) {
+  D1 = (X1 == 0)
+  colSums(D1)
+}
+```
+
+
+#### Other Ways To Deal With Missing Values
+
+```{r}
+# is.na() function provides tests for missing values
+
+x <- c(1, 2, 3, NA, 4)
+is.na(x) #used to check for missing values in an object
+# arithmetic functions, such as mean(), applied to data containing missing values 
+```
+
+is.na can gives results in a boolean form. If there is any missing values you can see TRUE statement.
+
+```{r}
+mean(x, na.rm=TRUE)
+mean(x, na.rm=FALSE)
+```
+
+If you choose na.rm=FALSE then you will have NA in your result. But if you choose na.rm =TRUE, R will compute without considering the missing value.
+
+```{r}
+DF <- data.frame(x = c(1, 2, 3), y = c(10, 20, NA))
+DF
+DF[!complete.cases(DF),] # list rows of data that have missing values
+na.omit(DF)  # Delete the NA values from our dataset 
+DF1 <- na.exclude(DF) # Delete the NA values from our dataset 
+DF1  # na.exclude() function returns the object with incomplete cases removed.
+```
+
+We created a data frame with missing values in it. Using command **na.omit** or **na.exclude**, you can remove the rows with missing values in it.
+
+```{r}
+sum(is.na(DF)) # identify count of NAs in data frame
+```
+
+We can have the total number of missing values using sum command.For data frames, a convenient shortcut to compute the total missing values  in each column is to use colSums().
+
+```{r}
+colSums(is.na(DF))
+```
+
+There are no missing values in X but there is only one missing values in Y.
+
+To determine the position of missing values we can use
+
+```{r}
+xal <- c(1,2,3,4,5,6,NA,8,NA,9)
+which(is.na(xal)) #position of missing values
+```
+
+At 7th and 9th position of our data, the values are missing.
+
+
+
+
+
+
+
+
+
+
+
+
